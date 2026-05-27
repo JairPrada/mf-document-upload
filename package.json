@@ -1,0 +1,25 @@
+{
+  "name": "mf-document-upload",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"vite build --watch\" \"vite preview --port 3004\"",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@angular/common": "^19.0.0",
+    "@angular/compiler": "^19.0.0",
+    "@angular/core": "^19.0.0",
+    "@angular/platform-browser": "^19.0.0",
+    "@journals/mf-contract": "workspace:*",
+    "rxjs": "^7.8.0",
+    "zone.js": "^0.15.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.12"
+  }
+}
