@@ -1,56 +1,61 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NgForOf } from '@angular/common';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { NgForOf, NgClass, NgIf } from '@angular/common';
+import { publish } from '../events';
 
 @Component({
   selector: 'app-document-upload',
   standalone: true,
-  imports: [NgForOf],
+  imports: [NgForOf, NgClass, NgIf],
+  encapsulation: ViewEncapsulation.None,
   template: `
-    <div style="max-width:480px;margin:0 auto;padding:32px 24px;font-family:sans-serif">
-      <h2 style="font-size:1.25rem;font-weight:600;color:#1e293b;margin-bottom:4px">
-        Documentos de respaldo
-      </h2>
-      <p style="font-size:0.875rem;color:#64748b;margin-bottom:24px">
-        Sube los documentos requeridos para continuar con tu solicitud
-      </p>
-
-      <div *ngFor="let doc of requiredDocs; let i = index"
-           style="display:flex;align-items:center;justify-content:space-between;
-                  padding:12px 16px;margin-bottom:8px;border:1px solid #e2e8f0;
-                  border-radius:8px;background:#f8fafc">
-        <div>
-          <div style="font-size:0.875rem;font-weight:500;color:#334155">{{ doc.label }}</div>
-          <div style="font-size:0.75rem;color:#94a3b8">{{ doc.hint }}</div>
+    <div class="doc-root">
+      <div class="doc-topbar"></div>
+      <header class="doc-header">
+        <div class="doc-logo">
+          <div class="doc-logo-text">
+            <span class="doc-logo-name">Banco Caja Social</span>
+          </div>
         </div>
-        <label style="cursor:pointer;padding:6px 14px;font-size:0.8125rem;
-                      font-weight:500;color:#6366f1;border:1px solid #6366f1;
-                      border-radius:6px;background:white;transition:all 0.15s;
-                      white-space:nowrap">
-          {{ uploaded[i] ? 'Cambiar' : 'Subir' }}
-          <input type="file" (change)="onFileSelect(i, $event)" style="display:none" />
-        </label>
-      </div>
+        <nav class="doc-nav">
+          <span>Cr\u00e9dito </span>
+          <span class="doc-nav-highlight">Hipotecario</span>
+        </nav>
+      </header>
+      <main class="doc-main">
+        <h2 class="doc-title">Documentos de respaldo</h2>
+        <p class="doc-subtitle">Sube los documentos requeridos para continuar con tu solicitud</p>
+        <div class="doc-form-wrap">
+          <div class="doc-docs">
+            <div *ngFor="let doc of requiredDocs; let i = index"
+                 class="doc-doc-item"
+                 [ngClass]="{'doc-doc-item--uploaded': uploaded[i]}">
+              <div class="doc-doc-info">
+                <div class="doc-doc-label">{{ doc.label }}</div>
+                <div class="doc-doc-hint">{{ doc.hint }}</div>
+                <div class="doc-doc-status" *ngIf="uploaded[i]">Subido</div>
+              </div>
+              <label class="doc-upload-btn" [ngClass]="{'doc-upload-btn--done': uploaded[i]}">
+                {{ uploaded[i] ? 'Cambiar' : 'Subir' }}
+                <input type="file" class="doc-file-input" (change)="onFileSelect(i, $event)" />
+              </label>
+            </div>
+          </div>
 
-      <ul style="font-size:0.75rem;color:#94a3b8;margin:16px 0 24px;padding-left:16px">
-        <li style="margin-bottom:4px">Formatos aceptados: PDF, JPG, PNG</li>
-        <li style="margin-bottom:4px">Tamaño máximo: 10 MB por archivo</li>
-      </ul>
+          <ul class="doc-info-list">
+            <li>Formatos aceptados: PDF, JPG, PNG</li>
+            <li>Tama\u00f1o m\u00e1ximo: 10 MB por archivo</li>
+          </ul>
 
-      <button (click)="onSubmit()"
-              [style]="'width:100%;padding:12px;border:none;border-radius:8px;font-size:0.9375rem;' +
-                       'font-weight:600;cursor:pointer;transition:all 0.15s;' +
-                       (allUploaded
-                         ? 'background:#6366f1;color:white'
-                         : 'background:#e2e8f0;color:#94a3b8;cursor:not-allowed')">
-        Continuar
-      </button>
+          <button class="doc-btn" [ngClass]="{'doc-btn--active': allUploaded}"
+                  [disabled]="!allUploaded" (click)="onSubmit()">
+            Continuar
+          </button>
+        </div>
+      </main>
     </div>
   `,
 })
 export class DocumentUploadComponent {
-  @Input() emit?: (name: string, detail?: Record<string, unknown>) => void;
-  @Output() submit = new EventEmitter<void>();
-
   requiredDocs = [
     { label: 'Identificacion oficial', hint: 'INE o Pasaporte' },
     { label: 'Comprobante de ingresos', hint: 'Ultimos 3 meses' },
@@ -66,13 +71,12 @@ export class DocumentUploadComponent {
   onFileSelect(index: number, event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
-      this.uploaded[index] = true;
+      this.uploaded = this.uploaded.map((v, i) => (i === index ? true : v));
     }
   }
 
   onSubmit() {
     if (!this.allUploaded) return;
-    this.emit?.('mf:document-upload:submit', { uploaded: true });
-    this.submit.emit();
+    publish('mf-document-upload:DocumentUpload:submit', { uploaded: true });
   }
 }

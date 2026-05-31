@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import { manifestPlugin } from '@journals/mf-contract/vite-plugin'
+import { manifestPlugin } from '@journals/lib-manifest/vite-plugin'
 
 export default defineConfig({
   plugins: [manifestPlugin()],

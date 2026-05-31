@@ -4,6 +4,7 @@ import { createApplication } from '@angular/platform-browser';
 import { createComponent } from '@angular/core';
 import { DocumentUploadComponent } from './app/document-upload.component';
 import { manifest } from './manifest';
+import './styles.css';
 
 const cssUrl = new URL('./remoteEntry.css', import.meta.url).href;
 if (!document.querySelector(`link[href="${cssUrl}"]`)) {
@@ -17,7 +18,7 @@ const apps = new WeakMap<HTMLElement, import('@angular/core').ApplicationRef>();
 
 export default {
     manifest,
-    async mount(el: HTMLElement, props: Record<string, unknown> = {}): Promise<void> {
+    async mount(el: HTMLElement, _component: string, props: Record<string, unknown> = {}): Promise<void> {
         const appRef = await createApplication();
 
         const componentRef = createComponent(DocumentUploadComponent, {

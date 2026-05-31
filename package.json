@@ -3,23 +3,35 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "exports": {
+    "./events": {
+      "types": "./src/events.ts",
+      "default": "./src/events.ts"
+    },
+    "./manifest": {
+      "types": "./src/manifest.ts",
+      "default": "./src/manifest.ts"
+    }
+  },
   "scripts": {
     "dev": "concurrently \"vite build --watch\" \"vite preview --port 3004\"",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@angular/common": "^19.0.0",
-    "@angular/compiler": "^19.0.0",
-    "@angular/core": "^19.0.0",
-    "@angular/platform-browser": "^19.0.0",
-    "@journals/mf-contract": "workspace:*",
-    "rxjs": "^7.8.0",
-    "zone.js": "^0.15.0"
+    "@angular/common": "^19.2.23",
+    "@angular/compiler": "^19.2.23",
+    "@angular/core": "^19.2.23",
+    "@angular/platform-browser": "^19.2.23",
+    "@journals/lib-manifest": "workspace:*",
+    "@journals/lib-service-bus": "workspace:*",
+    "rxjs": "^7.8.2",
+    "zod": "^3.25.76",
+    "zone.js": "^0.15.1"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
-    "typescript": "~6.0.2",
-    "vite": "^8.0.12"
+    "typescript": "~6.0.3",
+    "vite": "^8.0.14"
   }
 }
