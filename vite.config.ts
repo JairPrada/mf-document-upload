@@ -13,6 +13,7 @@ export default defineConfig({
       fileName: 'remoteEntry',
     },
     rollupOptions: {},
+    minify: false,
   },
   server: { port: 3004 },
   preview: {
