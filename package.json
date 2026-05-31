@@ -23,8 +23,8 @@
     "@angular/compiler": "^19.2.23",
     "@angular/core": "^19.2.23",
     "@angular/platform-browser": "^19.2.23",
-    "@journals/lib-manifest": "workspace:*",
-    "@journals/lib-service-bus": "workspace:*",
+    "@journals/lib-manifest": "file:./vendor/journals-lib-manifest-0.1.0.tgz",
+    "@journals/lib-service-bus": "file:./vendor/journals-lib-service-bus-0.1.0.tgz",
     "rxjs": "^7.8.2",
     "zod": "^3.25.76",
     "zone.js": "^0.15.1"
@@ -33,5 +33,11 @@
     "concurrently": "^9.2.1",
     "typescript": "~6.0.3",
     "vite": "^8.0.14"
+  },
+  "pnpm": {
+    "overrides": {
+      "@journals/lib-manifest": "file:./vendor/journals-lib-manifest-0.1.0.tgz",
+      "@journals/lib-service-bus": "file:./vendor/journals-lib-service-bus-0.1.0.tgz"
+    }
   }
 }

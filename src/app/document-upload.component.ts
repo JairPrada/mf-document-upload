@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectorRef, inject } from '@angular/core';
 import { NgForOf, NgClass, NgIf } from '@angular/common';
 import { publish } from '../events';
 
@@ -56,6 +56,8 @@ import { publish } from '../events';
   `,
 })
 export class DocumentUploadComponent {
+  private cdr = inject(ChangeDetectorRef);
+
   requiredDocs = [
     { label: 'Identificacion oficial', hint: 'INE o Pasaporte' },
     { label: 'Comprobante de ingresos', hint: 'Ultimos 3 meses' },
@@ -72,6 +74,7 @@ export class DocumentUploadComponent {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
       this.uploaded = this.uploaded.map((v, i) => (i === index ? true : v));
+      this.cdr.detectChanges();
     }
   }
 
